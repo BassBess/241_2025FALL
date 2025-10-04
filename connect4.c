@@ -80,69 +80,56 @@ int placePiece(char **b, int col, char p, int *row_placed)
 
 int checkWin(char **b, int row, int col, char p)
 {
-    for (int start = 0; start <= 3; start++)
-    {
-        int count = 0;
-        for (int offset = 0; offset < 4; offset++)
-        {
-            int c = col + start + offset;
-            if (c < COLS && b[row][c] == p)
-                count++;
-        }
-        if (count == 4)
-            return 1;
-    }
-
-    for (int start = 0; start <= 2; start++)
-    {
-        int count = 0;
-        for (int offset = 0; offset < 4; offset++)
-        {
-            int r = row + start + offset;
-            if (r < ROWS && b[r][col] == p)
-                count++;
-        }
-        if (count == 4)
-            return 1;
-    }
-
-    for (int start_r = 0; start_r <= 2; start_r++)
-    {
-        for (int start_c = 0; start_c <= 3; start_c++)
-        {
-            int count = 0;
-            for (int offset = 0; offset < 4; offset++)
-            {
-                int r = start_r + offset;
-                int c = start_c + offset;
-                if (r < ROWS && c < COLS && b[r][c] == p)
-                    count++;
-            }
-            if (count == 4)
-                return 1;
+    int count;
+    
+    count = 0;
+    for (int i = 0; i < COLS; i++) {
+        if (b[row][i] == p) {
+            count++;
+            if (count == 4) return 1;
+        } else {
+            count = 0;
         }
     }
-
-    for (int start_r = 0; start_r <= 2; start_r++)
-    {
-        for (int start_c = 3; start_c < COLS; start_c++)
-        {
-            int count = 0;
-            for (int offset = 0; offset < 4; offset++)
-            {
-                int r = start_r + offset;
-                int c = start_c - offset;
-                if (r < ROWS && c >= 0 && b[r][c] == p)
-                    count++;
-            }
-            if (count == 4)
-                return 1;
+    
+    count = 0;
+    for (int i = 0; i < ROWS; i++) {
+        if (b[i][col] == p) {
+            count++;
+            if (count == 4) return 1;
+        } else {
+            count = 0;
         }
     }
-
+    
+    count = 0;
+    int r = row, c = col;
+    while (r > 0 && c > 0) { r--; c--; } 
+    while (r < ROWS && c < COLS) {
+        if (b[r][c] == p) {
+            count++;
+            if (count == 4) return 1;
+        } else {
+            count = 0;
+        }
+        r++; c++;
+    }
+    
+    count = 0;
+    r = row; c = col;
+    while (r > 0 && c < COLS - 1) { r--; c++; } // Move to top-right start of diagonal
+    while (r < ROWS && c >= 0) {
+        if (b[r][c] == p) {
+            count++;
+            if (count == 4) return 1;
+        } else {
+            count = 0;
+        }
+        r++; c--;
+    }
+    
     return 0;
 }
-
 int isBoardFull(char **b)
 {
     for (int i = 0; i < COLS; i++)
