@@ -117,7 +117,7 @@ int checkWin(char **b, int row, int col, char p)
     
     count = 0;
     r = row; c = col;
-    while (r > 0 && c < COLS - 1) { r--; c++; } // Move to top-right start of diagonal
+    while (r > 0 && c < COLS - 1) { r--; c++; } 
     while (r < ROWS && c >= 0) {
         if (b[r][c] == p) {
             count++;
