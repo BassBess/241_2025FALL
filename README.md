@@ -1,2 +1,2 @@
-# connect4
+# 241_2025FALL
 connect4 project 
