@@ -19,11 +19,21 @@ void setupPlayers(Player players[2])
     {
         printf("Enter name for Player %d: ", i + 1);
         scanf(" %49[^\n]", players[i].name);
+void setupPlayers(Player players[2])
+{
+    char temp[100];
+    
+    for (int i = 0; i < 2; i++)
+    {
+        printf("Enter name for Player %d: ", i + 1);
+        fgets(players[i].name, sizeof(players[i].name), stdin);
+        
+        players[i].name[strcspn(players[i].name, "\n")] = 0;
 
         printf("Enter symbol for %s: ", players[i].name);
-
+        
         char symbol_input[100];
-        scanf(" %99[^\n]", symbol_input);
+        fgets(symbol_input, sizeof(symbol_input), stdin);
         players[i].symbol = symbol_input[0];
 
         if (i == 1 && players[1].symbol == players[0].symbol)
@@ -146,8 +156,7 @@ int main()
 
     printf("Welcome to Connect 4!!!!!!!!!!!!!!!!\n\n");
     setupPlayers(players);
-    char temp[100];
-    fgets(temp, sizeof(temp), stdin);
+   
     printf("\nGame starting!\n");
     PrintBoard(board);
 
