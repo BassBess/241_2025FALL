@@ -176,8 +176,8 @@ int main()
 
             if (checkWin(board, row_placed, column - 1, players[current].symbol))
             {
-                printf("\n%s (%c) wins!\n", players[current].name, players[current].symbol);
-                printf("Play again? Press 'y' for YES, or any other key to quit: ");
+                printf("\n%s (%c) wins!\nPlay again? Press 'y' for YES, or any other key to quit: \n", players[current].name, players[current].symbol);
+          
                 gameOver = 1;
                 
                 char response[10];
@@ -193,8 +193,8 @@ int main()
             }
             else if (isBoardFull(board))
             {
-                printf("\nIt's a draw!\n");
-                printf("Play again? Press 'y' for YES, or any other key to quit: ");
+                printf("\nIt's a draw!\nPlay again? Press 'y' for YES, or any other key to quit: \n");
+              
                 gameOver = 1;
                 
                 char response[10];
