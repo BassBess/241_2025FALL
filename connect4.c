@@ -15,11 +15,11 @@ typedef struct
 
 void setupPlayers(Player players[2])
 {
-    // Player A
+ 
     strcpy(players[0].name, "Player A");
     players[0].symbol = 'A';
     
-    // Player B  
+    
     strcpy(players[1].name, "Player B");
     players[1].symbol = 'B';
     
@@ -135,60 +135,77 @@ int isBoardFull(char **b)
 
 int main()
 {
-    char **board = createBoard();
-    Player players[2];
-    int current = 0, gameOver = 0;
-
-    printf("Welcome to Connect 4!!!!!!!!!!!!!!!!\n\n");
-    setupPlayers(players);
-   
-    printf("\nGame starting!\n");
-    PrintBoard(board);
-
-    while (!gameOver)
+    int playAgain = 1;
+    
+    while (playAgain)
     {
-        printf("\n%s (%c), choose a column (1-7): ", players[current].name, players[current].symbol);
+        char **board = createBoard();
+        Player players[2];
+        int current = 0, gameOver = 0;
 
-        char input[10];
-        fgets(input, sizeof(input), stdin);
-
-        int column;
-        if (sscanf(input, "%d", &column) != 1)
-        {
-            printf("Please enter a valid number (1-7).\n");
-            continue;
-        }
-
-        if (column < 1 || column > 7)
-        {
-            printf("Invalid column. Choose between 1 and %d.\n", COLS);
-            continue;
-        }
-
-        int row_placed;
-        if (!placePiece(board, column, players[current].symbol, &row_placed))
-            continue;
-
+        printf("Welcome to Connect 4!!!!!!!!!!!!!!!!\n\n");
+        setupPlayers(players);
+        printf("\nGame starting!\n");
         PrintBoard(board);
 
-        if (checkWin(board, row_placed, column - 1, players[current].symbol))
+        while (!gameOver)
         {
-            printf("\n%s (%c) wins!\n", players[current].name, players[current].symbol);
-            gameOver = 1;
-        }
-        else if (isBoardFull(board))
-        {
-            printf("\nIt's a draw!\n");
-            gameOver = 1;
-        }
-        else
-        {
-            current = !current;
-        }
-    }
+            printf("\n%s (%c), choose a column (1-7): ", players[current].name, players[current].symbol);
 
-    for (int i = 0; i < ROWS; i++)
-        free(board[i]);
-    free(board);
+            char input[10];
+            fgets(input, sizeof(input), stdin);
+
+            int column;
+            if (sscanf(input, "%d", &column) != 1)
+            {
+                printf("Please enter a valid number (1-7).\n");
+                continue;
+            }
+
+            if (column < 1 || column > 7)
+            {
+                printf("Invalid column. Choose between 1 and %d.\n", COLS);
+                continue;
+            }
+
+            int row_placed;
+            if (!placePiece(board, column, players[current].symbol, &row_placed))
+                continue;
+
+            PrintBoard(board);
+
+            if (checkWin(board, row_placed, column - 1, players[current].symbol))
+            {
+                printf("\n%s (%c) wins!\n", players[current].name, players[current].symbol);
+                gameOver = 1;
+            }
+            else if (isBoardFull(board))
+            {
+                printf("\nIt's a draw!\n");
+                gameOver = 1;
+            }
+            else
+            {
+                current = !current;
+            }
+        }
+
+        printf("\nWould you like to play again? (y/n): ");
+        char response[10];
+        fgets(response, sizeof(response), stdin);
+        
+        if (response[0] == 'y' || response[0] == 'Y') {
+            playAgain = 1;
+            printf("\nStarting new game...\n\n");
+        } else {
+            playAgain = 0;
+            printf("Thanks for playing!\n");
+        }
+
+        for (int i = 0; i < ROWS; i++)
+            free(board[i]);
+        free(board);
+    }
+    
     return 0;
 }
