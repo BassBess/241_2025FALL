@@ -177,29 +177,41 @@ int main()
             if (checkWin(board, row_placed, column - 1, players[current].symbol))
             {
                 printf("\n%s (%c) wins!\n", players[current].name, players[current].symbol);
+                printf("Play again? Press 'y' for YES, or any other key to quit: ");
                 gameOver = 1;
+                
+                char response[10];
+                fgets(response, sizeof(response), stdin);
+                
+                if (response[0] == 'y' || response[0] == 'Y') {
+                    playAgain = 1;
+                    printf("\nStarting new game...\n\n");
+                } else {
+                    playAgain = 0;
+                    printf("Thanks for playing!\n");
+                }
             }
             else if (isBoardFull(board))
             {
                 printf("\nIt's a draw!\n");
+                printf("Play again? Press 'y' for YES, or any other key to quit: ");
                 gameOver = 1;
+                
+                char response[10];
+                fgets(response, sizeof(response), stdin);
+                
+                if (response[0] == 'y' || response[0] == 'Y') {
+                    playAgain = 1;
+                    printf("\nStarting new game...\n\n");
+                } else {
+                    playAgain = 0;
+                    printf("Thanks for playing!\n");
+                }
             }
             else
             {
                 current = !current;
             }
-        }
-
-        printf("\nWould you like to play again? (y/n): ");
-        char response[10];
-        fgets(response, sizeof(response), stdin);
-        
-        if (response[0] == 'y' || response[0] == 'Y') {
-            playAgain = 1;
-            printf("\nStarting new game...\n\n");
-        } else {
-            playAgain = 0;
-            printf("Thanks for playing!\n");
         }
 
         for (int i = 0; i < ROWS; i++)
