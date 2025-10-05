@@ -15,34 +15,19 @@ typedef struct
 
 void setupPlayers(Player players[2])
 {
-    for (int i = 0; i < 2; i++)
-    {
-        printf("Enter name for Player %d: ", i + 1);
-        scanf(" %49[^\n]", players[i].name);
-void setupPlayers(Player players[2])
-{
-    char temp[100];
+    // Player A
+    strcpy(players[0].name, "Player A");
+    players[0].symbol = 'A';
     
-    for (int i = 0; i < 2; i++)
-    {
-        printf("Enter name for Player %d: ", i + 1);
-        fgets(players[i].name, sizeof(players[i].name), stdin);
-        
-        players[i].name[strcspn(players[i].name, "\n")] = 0;
-
-        printf("Enter symbol for %s: ", players[i].name);
-        
-        char symbol_input[100];
-        fgets(symbol_input, sizeof(symbol_input), stdin);
-        players[i].symbol = symbol_input[0];
-
-        if (i == 1 && players[1].symbol == players[0].symbol)
-        {
-            printf("Symbol already taken! Using '%c' instead.\n", players[1].symbol + 1);
-            players[1].symbol++;
-        }
-    }
+    // Player B  
+    strcpy(players[1].name, "Player B");
+    players[1].symbol = 'B';
+    
+    printf("Players set: %s (%c) vs %s (%c)\n", 
+           players[0].name, players[0].symbol,
+           players[1].name, players[1].symbol);
 }
+
 
 char **createBoard()
 {
