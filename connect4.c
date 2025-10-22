@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <time.h>
 
 #define ROWS 6
 #define COLS 7
@@ -15,10 +16,8 @@ typedef struct
 
 void setupPlayers(Player players[2])
 {
- 
     strcpy(players[0].name, "Player A");
     players[0].symbol = 'A';
-    
     
     strcpy(players[1].name, "Player B");
     players[1].symbol = 'B';
@@ -27,7 +26,6 @@ void setupPlayers(Player players[2])
            players[0].name, players[0].symbol,
            players[1].name, players[1].symbol);
 }
-
 
 char **createBoard()
 {
@@ -125,6 +123,7 @@ int checkWin(char **b, int row, int col, char p)
     
     return 0;
 }
+
 int isBoardFull(char **b)
 {
     for (int i = 0; i < COLS; i++)
@@ -135,6 +134,7 @@ int isBoardFull(char **b)
 
 int main()
 {
+    srand(time(NULL));
     int playAgain = 1;
     
     while (playAgain)
@@ -142,24 +142,54 @@ int main()
         char **board = createBoard();
         Player players[2];
         int current = 0, gameOver = 0;
+        int bot = 0;  
 
         printf("Welcome to Connect 4!!!!!!!!!!!!!!!!\n\n");
+        printf("Choose game mode:\n");
+        printf("1 - Player vs Player\n");
+        printf("2 - Player vs Computer (Easy)\n");
+        printf("Enter your choice (1 or 2): ");
+        int choice;
+        scanf("%d", &choice);
+        while (getchar() != '\n');
+        
+        if (choice == 2) {
+            bot = 1; 
+            strcpy(players[1].name, "Computer"); 
+        }
         setupPlayers(players);
         printf("\nGame starting!\n");
         PrintBoard(board);
 
         while (!gameOver)
         {
-            printf("\n%s (%c), choose a column (1-7): ", players[current].name, players[current].symbol);
+            int column = -1;
 
-            char input[10];
-            fgets(input, sizeof(input), stdin);
-
-            int column;
-            if (sscanf(input, "%d", &column) != 1)
+            
+            if (bot && current == 1)  
             {
-                printf("Please enter a valid number (1-7).\n");
-                continue;
+                
+                int attempts = 0;
+                do {
+                    column = (rand() % 7) + 1;  
+                    attempts++;
+                } while (board[0][column - 1] != EMPTY && attempts < 20);
+                
+                printf("\n%s (%c) chooses column %d\n", players[current].name, players[current].symbol, column);
+            }
+            else
+            {
+                
+                printf("\n%s (%c), choose a column (1-7): ", players[current].name, players[current].symbol);
+
+                char input[10];
+                fgets(input, sizeof(input), stdin);
+
+                if (sscanf(input, "%d", &column) != 1)
+                {
+                    printf("Please enter a valid number (1-7).\n");
+                    continue;
+                }
             }
 
             if (column < 1 || column > 7)
@@ -177,7 +207,7 @@ int main()
             if (checkWin(board, row_placed, column - 1, players[current].symbol))
             {
                 printf("\n%s (%c) wins!\nPlay again? Press 'y' for YES, or any other key to quit: \n", players[current].name, players[current].symbol);
-          
+  
                 gameOver = 1;
                 
                 char response[10];
@@ -194,7 +224,7 @@ int main()
             else if (isBoardFull(board))
             {
                 printf("\nIt's a draw!\nPlay again? Press 'y' for YES, or any other key to quit: \n");
-              
+      
                 gameOver = 1;
                 
                 char response[10];
