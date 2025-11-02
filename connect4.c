@@ -157,9 +157,7 @@ int medBot(char **b, char botS, char playerS) {
         if (b[0][col-1] == EMPTY) return col;
     }
 
-    for (int col = 1; col <= COLS; col++) {
-        if (b[0][col-1] == EMPTY) return col;
-    }
+   
     return 1;
 }
 int isBoardFull(char **b)
@@ -184,10 +182,10 @@ int main()
 
         printf("Welcome to Connect 4!!!!!!!!!!!!!!!!\n\n");
         printf("Choose game mode:\n");
-printf("1 - Player vs Player\n");
-printf("2 - Player vs Computer (Easy)\n");
-printf("3 - Player vs Computer (Medium)\n");
-printf("Enter your choice (1, 2, or 3): ");
+        printf("1 - Player vs Player\n");
+        printf("2 - Player vs Computer (Easy)\n");
+        printf("3 - Player vs Computer (Medium)\n");
+        printf("Enter your choice (1, 2, or 3): ");
         int choice;
         scanf("%d", &choice);
         while (getchar() != '\n');
