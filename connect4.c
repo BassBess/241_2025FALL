@@ -123,7 +123,45 @@ int checkWin(char **b, int row, int col, char p)
     
     return 0;
 }
+int canWin(char **b, int col, char s) {
+    if (b[0][col-1] != EMPTY) return 0;
+    
+    int row = -1;
+    for (int i = ROWS - 1; i >= 0; i--) {
+        if (b[i][col-1] == EMPTY) {
+            row = i;
+            break;
+        }
+    }
+    if (row == -1) return 0;
+    
+    b[row][col-1] = s;
+    int wins = checkWin(b, row, col-1, s);
+    b[row][col-1] = EMPTY;
+    
+    return wins;
+}
 
+int medBot(char **b, char botS, char playerS) {
+    for (int col = 1; col <= COLS; col++) {
+        if (canWin(b, col, botS)) return col;
+    }
+    
+    for (int col = 1; col <= COLS; col++) {
+        if (canWin(b, col, playerS)) return col;
+    }
+
+    int centers[] = {4, 3, 5, 2, 6, 1, 7};
+    for (int i = 0; i < COLS; i++) {
+        int col = centers[i];
+        if (b[0][col-1] == EMPTY) return col;
+    }
+
+    for (int col = 1; col <= COLS; col++) {
+        if (b[0][col-1] == EMPTY) return col;
+    }
+    return 1;
+}
 int isBoardFull(char **b)
 {
     for (int i = 0; i < COLS; i++)
@@ -146,17 +184,24 @@ int main()
 
         printf("Welcome to Connect 4!!!!!!!!!!!!!!!!\n\n");
         printf("Choose game mode:\n");
-        printf("1 - Player vs Player\n");
-        printf("2 - Player vs Computer (Easy)\n");
-        printf("Enter your choice (1 or 2): ");
+printf("1 - Player vs Player\n");
+printf("2 - Player vs Computer (Easy)\n");
+printf("3 - Player vs Computer (Medium)\n");
+printf("Enter your choice (1, 2, or 3): ");
         int choice;
         scanf("%d", &choice);
         while (getchar() != '\n');
         
-        if (choice == 2) {
-            bot = 1; 
-            strcpy(players[1].name, "Computer"); 
-        }
+     int botDiff = 0;
+if (choice == 2) {
+    bot = 1;
+    botDiff = 1;
+    strcpy(players[1].name, "Computer (Easy)");
+} else if (choice == 3) {
+    bot = 1;
+    botDiff = 2;
+    strcpy(players[1].name, "Computer (Medium)");
+}
         setupPlayers(players);
         printf("\nGame starting!\n");
         PrintBoard(board);
@@ -166,17 +211,19 @@ int main()
             int column = -1;
 
             
-            if (bot && current == 1)  
-            {
-                
-                int attempts = 0;
-                do {
-                    column = (rand() % 7) + 1;  
-                    attempts++;
-                } while (board[0][column - 1] != EMPTY && attempts < 20);
-                
-                printf("\n%s (%c) chooses column %d\n", players[current].name, players[current].symbol, column);
-            }
+          if (bot && current == 1)  
+{
+    if (botDiff == 1) {
+     
+        do {
+            column = (rand() % 7) + 1;  
+        } while (board[0][column - 1] != EMPTY);
+    } else if (botDiff == 2) {
+        
+        column = medBot(board, players[current].symbol, players[0].symbol);
+    }
+    printf("\n%s (%c) chooses column %d\n", players[current].name, players[current].symbol, column);
+}
             else
             {
                 
